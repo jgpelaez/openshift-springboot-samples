@@ -1,6 +1,6 @@
 spring:
   application:
-    name: openshift-sb-store
+    name: openshift-sb-ms-store
   cloud:
     config:
       uri: ${vcap.services.${PREFIX:}configserver.credentials.uri:http://user:password@localhost:8888}

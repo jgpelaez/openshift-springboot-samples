@@ -1,9 +1,7 @@
 package es.jgpelaez.openshift.sb.zuulserver;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -19,8 +17,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 
+import es.jgpelaez.openshift.sb.zuulserver.config.DynamicZuulConfig;
+import es.jgpelaez.openshift.sb.zuulserver.k8s.ServiceDiscovery;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
+/**
+ * @author Juan Carlos García Peláez
+ *
+ */
 @Configuration
 @Import({ ZuulServerApplication.class })
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
@@ -28,16 +32,15 @@ public class ZuulServerDiscoveryConfig {
 
 	public static class CustomDiscoveryClientRouteLocator extends DiscoveryClientRouteLocator {
 
-		String appPrefix;
-		Config config;
+		DynamicZuulConfig config;
 		ServiceDiscovery serviceDiscovery;
 
-		public CustomDiscoveryClientRouteLocator(ServiceDiscovery serviceDiscovery, String appPrefix, Config config,
+		public CustomDiscoveryClientRouteLocator(ServiceDiscovery serviceDiscovery, DynamicZuulConfig config,
 				String servletPath, DiscoveryClient discovery, ZuulProperties properties,
 				ServiceRouteMapper serviceRouteMapper) {
 			super(servletPath, discovery, properties, serviceRouteMapper);
 			this.serviceDiscovery = serviceDiscovery;
-			this.appPrefix = appPrefix;
+
 			this.config = config;
 		}
 
@@ -47,7 +50,10 @@ public class ZuulServerDiscoveryConfig {
 
 			if (!config.getUseEurekaServices()) {
 				for (String serviceId : serviceDiscovery.getServices()) {
-					String serviceName = serviceId.replaceAll(this.appPrefix, "");
+					String serviceName = serviceId;
+					if (config.getRemoveAppPrefix()) {
+						serviceName = serviceName.replaceAll(this.config.getAppPrefix(), "");
+					}
 					String path = "/" + config.getServicesPrefix() + "/" + serviceName + "/**";
 					CustomZuulRoute customZuulRoute = new CustomZuulRoute(config, serviceId, serviceName, serviceName,
 							path, null, null, true, false, null);
@@ -62,10 +68,11 @@ public class ZuulServerDiscoveryConfig {
 
 		String customServiceId;
 		String customServiceName;
-		Config config;
+		DynamicZuulConfig config;
 
-		public CustomZuulRoute(Config config, String customServiceId, String customServiceName, String id, String path,
-				String serviceId, String url, boolean stripPrefix, Boolean retryable, Set<String> sensitiveHeaders) {
+		public CustomZuulRoute(DynamicZuulConfig config, String customServiceId, String customServiceName, String id,
+				String path, String serviceId, String url, boolean stripPrefix, Boolean retryable,
+				Set<String> sensitiveHeaders) {
 			super(id, path, serviceId, url, stripPrefix, retryable, sensitiveHeaders);
 			this.config = config;
 			this.customServiceId = customServiceId;
@@ -94,26 +101,8 @@ public class ZuulServerDiscoveryConfig {
 
 	}
 
-	public static class ServiceDiscovery {
-
-		KubernetesClient client;
-
-		public ServiceDiscovery(KubernetesClient client) {
-			super();
-			this.client = client;
-		}
-
-		public List<String> getServices() {
-			return client.services().list().getItems().stream().map(s -> s.getMetadata().getName())
-					.collect(Collectors.toList());
-		}
-
-	}
-
-	public String appPrefix = "openshift-sb-";
-
 	@Autowired
-	private Config config;
+	private DynamicZuulConfig config;
 
 	@Autowired
 	private DiscoveryClient discovery;
@@ -140,8 +129,8 @@ public class ZuulServerDiscoveryConfig {
 
 	@Bean
 	public DiscoveryClientRouteLocator routeLocator() {
-		return new CustomDiscoveryClientRouteLocator(this.serviceDiscovery, this.appPrefix, this.config,
-				this.server.getServletPrefix(), this.discovery, this.zuulProperties, this.serviceRouteMapper);
+		return new CustomDiscoveryClientRouteLocator(this.serviceDiscovery, this.config, this.server.getServletPrefix(),
+				this.discovery, this.zuulProperties, this.serviceRouteMapper);
 	}
 
 }

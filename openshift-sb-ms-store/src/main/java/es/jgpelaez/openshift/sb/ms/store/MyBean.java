@@ -24,6 +24,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import es.jgpelaez.openshift.sb.ms.store.config.AppConfig;
+import es.jgpelaez.openshift.sb.ms.store.config.MyConfig;
+import es.jgpelaez.openshift.sb.ms.store.config.MySecrets;
+
 @Component
 @EnableConfigurationProperties
 public class MyBean {

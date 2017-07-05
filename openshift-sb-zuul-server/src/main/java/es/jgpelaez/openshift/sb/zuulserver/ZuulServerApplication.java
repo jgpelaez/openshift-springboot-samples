@@ -20,10 +20,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 
+import es.jgpelaez.openshift.sb.zuulserver.config.DynamicZuulConfig;
+
 @SpringBootApplication
-// @EnableZuulProxy
 @EnableCircuitBreaker
-// @EnableDiscoveryClient
+/**
+ * @author Juan Carlos García Peláez
+ * Zuul cannot be import with @EnableZuulProxy, as this configuration should be
+ * loaded later
+ */
 @Import(ZuulProxyConfiguration.class)
 public class ZuulServerApplication {
 
@@ -31,18 +36,13 @@ public class ZuulServerApplication {
 		new SpringApplicationBuilder(ZuulServerApplication.class).web(true).run(args);
 	}
 
-	/*
-	 * 
-	 * @RequestMapping("/timeout") public String timeout() throws
-	 * InterruptedException { Thread.sleep(80000); return "timeout"; }
-	 */
 	@Autowired
-	private Config config;
+	private DynamicZuulConfig config;
 
 	@Bean
 	public ServiceRouteMapper serviceRouteMapper() {
 		if (config.getUseEurekaServices()) {
-			return new PatternServiceRouteMapper("(?<name>)", "app/${name}");
+			return new PatternServiceRouteMapper("(?<name>)", config.getServicesPrefix() + "/${name}");
 		} else {
 			return new SimpleServiceRouteMapper();
 		}

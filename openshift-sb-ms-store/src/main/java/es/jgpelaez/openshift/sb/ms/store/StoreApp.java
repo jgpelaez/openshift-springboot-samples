@@ -17,18 +17,13 @@ package es.jgpelaez.openshift.sb.ms.store;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.jmnarloch.spring.request.correlation.api.EnableRequestCorrelation;
-import io.jmnarloch.spring.request.correlation.api.RequestCorrelationInterceptor;
 
 /**
  * Spring configuration class main application bootstrap point.
@@ -39,7 +34,6 @@ import io.jmnarloch.spring.request.correlation.api.RequestCorrelationInterceptor
 @EnableDiscoveryClient
 @RestController
 @EnableScheduling
-@EnableRequestCorrelation
 public class StoreApp {
 
 	private static final Logger logger = LoggerFactory.getLogger(StoreApp.class);

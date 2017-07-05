@@ -25,11 +25,13 @@ endpoints:
   health:
     sensitive: false
 
-zuulserver:
+dynamiczuul:
   useEurekaServices: false
   localServices: false
   servicesPort: ${SERVICES_PORT:9000}
   servicesPrefix: services 
+  appPrefix: openshift-sb-
+  removeAppPrefix: false
 
 zuul:
   routes:
