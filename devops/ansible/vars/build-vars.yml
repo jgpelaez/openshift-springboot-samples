@@ -3,4 +3,4 @@
 openshift_app_name: "openshift-sb-apigateway"
 openshift_templates_path: "{{ playbook_dir }}/../openshift/templates"
 eureka_uri: "http://openshift-sb-eureka:8761/eureka/"
-
+app_version: 0.0.1-SNAPSHOT

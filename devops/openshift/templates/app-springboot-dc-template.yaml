@@ -37,6 +37,10 @@ objects:
               value:  "${PORT}"
             - name: EUREKA_URI
               value:  "${EUREKA_URI}"
+            - name: APP_ARTIFACT_ID
+              value:  "${APP_ARTIFACT_ID}"
+            - name: APP_VERSION
+              value:  "${APP_VERSION}"
 
     triggers:
     - imageChangeParams:
@@ -51,7 +55,7 @@ objects:
     
 parameters:
 - name: SERVICE_NAME
-  value: eureka  
+  required: true  
 - name: APP_NAME
   value: openshift-sb
 - name: PORT
@@ -62,3 +66,7 @@ parameters:
   value: latest
 - name: NUM_REPLICAS
   value: "1"
+- name: APP_ARTIFACT_ID
+  required: true
+- name: APP_VERSION
+  required: true
