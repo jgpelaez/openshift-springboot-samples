@@ -1,4 +1,4 @@
-package org.zerhusen;
+package es.jgpelaez.openshift.sb.jwt.spring;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package org.zerhusen.security;
+package es.jgpelaez.openshift.sb.jwt.spring.security;
 
 import org.assertj.core.util.DateUtil;
 import org.junit.Before;
