@@ -1,0 +1,1 @@
+exec java -jar /wildfly/standalone/deployments/openshift-sb-eureka-0.0.1-SNAPSHOT.jar

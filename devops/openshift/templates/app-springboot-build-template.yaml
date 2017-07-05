@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: app-springboot-build-template
+metadata:
+  name: app-springboot-build
+objects: 
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: ${APP_NAME}-${SERVICE_NAME}
+  spec:
+    triggers:
+      - type: ConfigChange
+    runPolicy: Serial
+    source:
+      type: Git
+      git:
+        uri: ${GIT_SOURCE_URL}
+        ref: master
+      contextDir: ${SOURCE_CONTEXT_DIR}
+#      sourceSecret:
+#        name: bitbucket-rsa
+    strategy:
+      type: Source
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          namespace: ${NAMESPACE}
+          name: 'openshift-sb-wildfly:10.1'
+        incremental: true
+    output:
+      to:
+        kind: ImageStreamTag
+        name: '${APP_NAME}-${SERVICE_NAME}:latest'
+parameters:
+- name: SERVICE_NAME
+  value: eureka  
+- name: APP_NAME
+  value: openshift-sb
+- name: SOURCE_CONTEXT_DIR
+  required: true
+- name: NAMESPACE
+  required: true
+- name: GIT_SOURCE_URL
+  required: true

@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: openshift-sb-store
+  cloud:
+    config:
+      uri: ${vcap.services.${PREFIX:}configserver.credentials.uri:http://user:password@localhost:8888}
+    kubernetes:
+      secrets:
+        enabled: true
+        enableApi: true
+      reload:
+        enabled: true 

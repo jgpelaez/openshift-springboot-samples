@@ -1,0 +1,6 @@
+[default]
+localhost ansible_connection=local
+[build-slave]
+localhost ansible_connection=local
+[deploy-slave]
+localhost ansible_connection=local

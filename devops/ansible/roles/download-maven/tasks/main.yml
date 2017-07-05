@@ -1,0 +1,27 @@
+
+- name: Clean destination file 
+  maven_artifact:
+    group_id: "{{ groupId }}"
+    artifact_id: "{{ artifactId }}"
+    version: "{{ versionId }}"
+    extension: "{{ extensionId }}" 
+    classifier: "{{ classifierId }}" 
+    repository_url: "{{ mavenrepo_url }}" 
+    username: "{{ mavenrepo_user }}" 
+    password: "{{ mavenrepo_password }}" 
+    validate_certs: "{{ mavenrepo_validate_certs }}" 
+    dest: "{{ buildDockerJarFile }}"
+    state: absent
+
+- maven_artifact:
+    group_id: "{{ groupId }}"
+    artifact_id: "{{ artifactId }}"
+    version: "{{ versionId }}"
+    extension: "{{ extensionId }}" 
+    classifier: "{{ classifierId }}" 
+    repository_url: "{{ mavenrepo_url }}" 
+    username: "{{ mavenrepo_user }}" 
+    password: "{{ mavenrepo_password }}" 
+    validate_certs: "{{ mavenrepo_validate_certs }}" 
+    dest: "{{ buildDockerJarFile }}"
+    state: present

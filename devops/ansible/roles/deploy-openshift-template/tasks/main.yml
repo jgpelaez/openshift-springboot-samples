@@ -1,0 +1,47 @@
+- set_fact: openshift_connection_data="--insecure-skip-tls-verify=true --token={{ openshift_token }} --server={{ openshift_url }}"
+  when: openshift_connection_data is undefined
+  
+- set_fact: resource_name="{{ openshift_app_name }}"
+  when: resource_name is undefined
+  
+#- set_fact: image_full_name_repo_version="{{ image_repo_url }}/{{ image_prefix }}/{{ image_name }}:{{ versionId }}"
+#  when: "'is' == '{{template_type}}'"
+  
+
+- name:  delete template {{ template_type }} {{ resource_name }}
+  command: >
+    oc delete  {{ template_type }} {{ resource_name }}  \
+    -n {{ openshift_project_name }} \
+    {{ openshift_connection_data }}
+  when: redeploy_openshift_template|bool == true
+  ignore_errors: yes
+  
+- name: check if the app is created
+  command: >
+    oc get {{ template_type }} {{ resource_name }}  -n {{ openshift_project_name }} \
+    {{ openshift_connection_data }}
+  register: getdata
+  ignore_errors: yes
+  
+- name: create template app
+  command: >
+    oc new-app -f {{ openshift_templates_path }}/{{ template_name }} \
+    {{ openshift_extra_params }} \
+    -n {{ openshift_project_name }} \
+    {{ openshift_connection_data }}
+  when: "'not found' in '{{getdata.stderr}}'"
+#  ignore_errors: yes
+
+#- name: import image
+#  command: >
+#    oc import-image {{ resource_name }}:{{ versionId }} --from={{ image_full_name_repo_version }} --confirm \
+#        -n {{ openshift_project_name }} \
+#        {{ openshift_connection_data }}
+#  when: "'is' == '{{template_type}}'"
+  
+#- name: tag to latest
+#  command: >
+#    oc tag {{ resource_name }}:{{ versionId }} {{ resource_name }}:latest \
+#        -n {{ openshift_project_name }} \
+#        {{ openshift_connection_data }}
+#  when: "'is' == '{{template_type}}'"

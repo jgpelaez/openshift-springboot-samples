@@ -1,0 +1,265 @@
+---
+
+- hosts: deploy-slave
+  tasks:
+
+  
+  roles:
+########################################### 
+# - all
+###########################################
+    - role: deploy-openshift-template
+      template_name: "app-springboot-is-docker-template.yaml"
+      template_type: "is"
+      resource_name: "openshift-sb-wildfly"
+      openshift_extra_params: >
+        -p SERVICE_NAME=wildfly
+        -p IMAGE_NAME=openshift/wildfly-101-centos7:latest
+        -p IMAGE_TAG=10.1
+########################################### 
+# - eureka
+###########################################
+    - role: deploy-openshift-template
+      template_name: "app-springboot-is-template.yaml"
+      template_type: "is"
+      resource_name: "openshift-sb-eureka"
+      openshift_extra_params: ""
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-build-template.yaml"
+      template_type: "bc"
+      resource_name: "openshift-sb-eureka"
+      openshift_extra_params: >
+        -p SOURCE_CONTEXT_DIR=./openshift-sb-eureka
+        -p NAMESPACE={{ openshift_project_name }}
+        -p GIT_SOURCE_URL={{ git_source_url }}
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-dc-template.yaml"
+      template_type: "dc"
+      resource_name: "openshift-sb-eureka"
+      openshift_extra_params: >
+        -p PORT=8761 
+        -p EUREKA_URI={{ eureka_uri }}
+    - role: deploy-openshift-template
+      template_name: "app-springboot-service-template.yaml"
+      template_type: "service"
+      resource_name: "openshift-sb-eureka"
+      openshift_extra_params: "-p PORT=8761"
+    - role: deploy-openshift-template
+      template_name: "app-springboot-route-template.yaml"
+      template_type: "route"
+      resource_name: "openshift-sb-eureka"
+      openshift_extra_params: >
+        -p ROUTE_HOST_PREFIX=openshift-sb-eureka
+        -p URL_SUFIX={{ url_sufix }}
+
+########################################### 
+# - customers
+###########################################
+    - role: deploy-openshift-template
+      template_name: "app-springboot-is-template.yaml"
+      template_type: "is"
+      resource_name: "openshift-sb-customers"
+      openshift_extra_params: >
+        -p SERVICE_NAME=customers
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-build-template.yaml"
+      template_type: "bc"
+      resource_name: "openshift-sb-customers"
+      openshift_extra_params: >
+        -p SOURCE_CONTEXT_DIR=./openshift-sb-ms-customers
+        -p SERVICE_NAME=customers
+        -p NAMESPACE={{ openshift_project_name }}
+        -p GIT_SOURCE_URL={{ git_source_url }}
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-dc-template.yaml"
+      template_type: "dc"
+      resource_name: "openshift-sb-customers"
+      openshift_extra_params: >
+        -p PORT=9000
+        -p EUREKA_URI={{ eureka_uri }}
+        -p SERVICE_NAME=customers
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-service-template.yaml"
+      template_type: "service"
+      resource_name: "openshift-sb-customers"
+      openshift_extra_params: >
+        -p PORT=9000 
+        -p SERVICE_NAME=customers
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-route-template.yaml"
+      template_type: "route"
+      resource_name: "openshift-sb-customers"
+      openshift_extra_params: >
+        -p ROUTE_HOST_PREFIX=openshift-sb-customers
+        -p SERVICE_NAME=customers
+        -p URL_SUFIX={{ url_sufix }}
+
+########################################### 
+# - store
+###########################################
+    - role: deploy-openshift-template
+      template_name: "app-springboot-cm-template.yaml"
+      template_type: "cm"
+      resource_name: "openshift-sb-store"
+      openshift_extra_params: >
+        -p SERVICE_NAME=store
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-secret-template.yaml"
+      template_type: "secret"
+      resource_name: "openshift-sb-store"
+      openshift_extra_params: >
+        -p SERVICE_NAME=store
+
+
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-is-template.yaml"
+      template_type: "is"
+      resource_name: "openshift-sb-store"
+      openshift_extra_params: >
+        -p SERVICE_NAME=store
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-build-template.yaml"
+      template_type: "bc"
+      resource_name: "openshift-sb-store"
+      openshift_extra_params: >
+        -p SOURCE_CONTEXT_DIR=./openshift-sb-ms-store
+        -p SERVICE_NAME=store
+        -p NAMESPACE={{ openshift_project_name }}
+        -p GIT_SOURCE_URL={{ git_source_url }}
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-dc-template.yaml"
+      template_type: "dc"
+      resource_name: "openshift-sb-store"
+      openshift_extra_params: >
+        -p PORT=9000 
+        -p EUREKA_URI={{ eureka_uri }}
+        -p SERVICE_NAME=store
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-service-template.yaml"
+      template_type: "service"
+      resource_name: "openshift-sb-store"
+      openshift_extra_params: >
+        -p PORT=9000 
+        -p SERVICE_NAME=store
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-route-template.yaml"
+      template_type: "route"
+      resource_name: "openshift-sb-store"
+      openshift_extra_params: >
+        -p ROUTE_HOST_PREFIX=openshift-sb-store
+        -p SERVICE_NAME=store
+        -p URL_SUFIX={{ url_sufix }}
+
+
+########################################### 
+# - zuul-server
+###########################################
+    - role: deploy-openshift-template
+      template_name: "app-springboot-is-template.yaml"
+      template_type: "is"
+      resource_name: "openshift-sb-zuul-server"
+      openshift_extra_params: >
+        -p SERVICE_NAME=zuul-server
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-build-template.yaml"
+      template_type: "bc"
+      resource_name: "openshift-sb-zuul-server"
+      openshift_extra_params: >
+        -p SOURCE_CONTEXT_DIR=./openshift-sb-zuul-server
+        -p SERVICE_NAME=zuul-server
+        -p NAMESPACE={{ openshift_project_name }}
+        -p GIT_SOURCE_URL={{ git_source_url }}
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-dc-template.yaml"
+      template_type: "dc"
+      resource_name: "openshift-sb-zuul-server"
+      openshift_extra_params: >
+        -p PORT=8765 
+        -p EUREKA_URI={{ eureka_uri }}
+        -p SERVICE_NAME=zuul-server
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-service-template.yaml"
+      template_type: "service"
+      resource_name: "openshift-sb-zuul-server"
+      openshift_extra_params: >
+        -p PORT=8765 
+        -p SERVICE_NAME=zuul-server
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-route-template.yaml"
+      template_type: "route"
+      resource_name: "openshift-sb-zuul-server"
+      openshift_extra_params: >
+        -p ROUTE_HOST_PREFIX=openshift-sb-zuul-server
+        -p SERVICE_NAME=zuul-server
+        -p URL_SUFIX={{ url_sufix }}
+
+
+
+########################################### 
+# - jwt-spring-security
+###########################################
+    - role: deploy-openshift-template
+      template_name: "app-springboot-is-template.yaml"
+      template_type: "is"
+      resource_name: "openshift-sb-jwt-spring-security"
+      openshift_extra_params: >
+        -p SERVICE_NAME=jwt-spring-security
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-build-template.yaml"
+      template_type: "bc"
+      resource_name: "openshift-sb-jwt-spring-security"
+      openshift_extra_params: >
+        -p SOURCE_CONTEXT_DIR=./openshift-sb-jwt-spring-security
+        -p SERVICE_NAME=jwt-spring-security
+        -p NAMESPACE={{ openshift_project_name }}
+        -p GIT_SOURCE_URL={{ git_source_url }}
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-dc-template.yaml"
+      template_type: "dc"
+      resource_name: "openshift-sb-jwt-spring-security"
+      openshift_extra_params: >
+        -p PORT=8765 
+        -p EUREKA_URI={{ eureka_uri }}
+        -p SERVICE_NAME=jwt-spring-security
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-service-template.yaml"
+      template_type: "service"
+      resource_name: "openshift-sb-jwt-spring-security"
+      openshift_extra_params: >
+        -p PORT=8765 
+        -p SERVICE_NAME=jwt-spring-security
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-route-template.yaml"
+      template_type: "route"
+      resource_name: "openshift-sb-jwt-spring-security"
+      openshift_extra_params: >
+        -p ROUTE_HOST_PREFIX=openshift-sb-jwt-spring-security
+        -p SERVICE_NAME=jwt-spring-security
+        -p URL_SUFIX={{ url_sufix }}
+
+
+
+###########################################
+  vars_files:
+    - ./vars/build-vars.yml
+  

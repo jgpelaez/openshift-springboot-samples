@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: app-springboot-is-docker-template
+metadata:
+  name: app-springboot-is-docker
+objects: 
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: ${APP_NAME}-${SERVICE_NAME}
+  spec:
+    tags:
+    - from:
+        kind: DockerImage
+        name: ${IMAGE_NAME}
+      name: ${IMAGE_TAG}
+      importPolicy:
+        scheduled: true
+    
+parameters:
+- name: SERVICE_NAME
+- name: APP_NAME
+  value: openshift-sb
+- name: IMAGE_NAME
+  required: true
+- name: IMAGE_TAG
+  required: true
+  

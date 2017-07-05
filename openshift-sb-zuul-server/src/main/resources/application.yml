@@ -1,0 +1,56 @@
+server:
+  port: ${PORT:8765}
+  
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/}
+  instance:
+    preferIpAddress: true
+
+spring:
+  cloud:
+    kubernetes:
+      ribbon:
+        enabled: true
+        
+#ribbon:
+#  eureka:
+#   enabled: false
+
+info:
+  component: Zuul Server
+  
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+zuul:
+  routes:
+    stores: /stores/**
+    stores2:
+        path: /stores2/**
+        serviceId: STORES
+    stores3:
+        path: /customers3/**
+        url: http://localhost:9000
+    customersUrl:
+        path: /customersUrl/**
+        url: http://localhost:9000        
+    customers: /customers/**
+    zuulserver: /self/**
+
+zuulserver:
+  useEurekaServices: false
+  localServices: false
+  servicesPort: ${SERVICES_PORT:9000} 
+
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web: DEBUG

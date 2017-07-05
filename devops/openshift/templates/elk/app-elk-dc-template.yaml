@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: app-elk-dc-template
+metadata:
+  name: app-elk-dc
+objects: 
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${APP_NAME}-${SERVICE_NAME}
+  spec:
+    replicas: ${NUM_REPLICAS}
+    selector:
+      name: ${APP_NAME}-${SERVICE_NAME}
+    strategy:
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          name: ${APP_NAME}-${SERVICE_NAME}
+      spec:
+        containers:
+        - name: ${APP_NAME}-${SERVICE_NAME}
+
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APP_NAME}-${SERVICE_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${APP_NAME}-${SERVICE_NAME}:${IMAGE_VERSION}
+      type: ImageChange
+    - type: ConfigChange
+    
+parameters:
+- name: SERVICE_NAME
+  value: eureka  
+- name: APP_NAME
+  value: openshift-sb
+- name: PORT
+  required: true
+- name: EUREKA_URI
+  required: true  
+- name: IMAGE_VERSION
+  value: latest
+- name: NUM_REPLICAS
+  value: "1"

@@ -1,0 +1,18 @@
+- name: Build an image 
+  docker_image:
+    docker_host: "{{ dockerhost }}"
+    force: true
+    path: "{{ docker_build_dir }}"
+    name: "{{ image_full_name_repo }}"
+    tag: "{{ versionId }}"
+    buildargs:
+      ARTIFACT_ID: "{{ artifactId }}"
+      APP_VERSION: "{{ versionId }}"
+     
+    
+- name: Push image it to a private repo
+  docker_image:
+    docker_host: "{{ dockerhost }}"
+    name: "{{ image_full_name_repo }}"
+    tag: "{{ versionId }}"
+    push: yes

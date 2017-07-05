@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: app-springboot-dc-template
+metadata:
+  name: app-springboot-dc
+objects: 
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${APP_NAME}-${SERVICE_NAME}
+  spec:
+    replicas: ${NUM_REPLICAS}
+    selector:
+      name: ${APP_NAME}-${SERVICE_NAME}
+    strategy:
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          name: ${APP_NAME}-${SERVICE_NAME}
+      spec:
+        containers:
+        - name: ${APP_NAME}-${SERVICE_NAME}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: ${{PORT}}
+              scheme: HTTP              
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: ${{PORT}}
+              scheme: HTTP
+          env:
+            - name: PORT
+              value:  "${PORT}"
+            - name: EUREKA_URI
+              value:  "${EUREKA_URI}"
+
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APP_NAME}-${SERVICE_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${APP_NAME}-${SERVICE_NAME}:${IMAGE_VERSION}
+      type: ImageChange
+    - type: ConfigChange
+    
+parameters:
+- name: SERVICE_NAME
+  value: eureka  
+- name: APP_NAME
+  value: openshift-sb
+- name: PORT
+  required: true
+- name: EUREKA_URI
+  required: true  
+- name: IMAGE_VERSION
+  value: latest
+- name: NUM_REPLICAS
+  value: "1"
