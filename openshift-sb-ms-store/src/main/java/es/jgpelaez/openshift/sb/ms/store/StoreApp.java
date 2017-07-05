@@ -52,23 +52,7 @@ public class StoreApp {
 	}
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(StoreApp.class, args);
 	}
 
-	@Bean
-	public RequestCorrelationInterceptor correlationLoggingInterceptor() {
-		return new RequestCorrelationInterceptor() {
-			@Override
-			public void afterCorrelationIdSet(String correlationId) {
-				MDC.put("correlationId", correlationId);
-			}
-
-			@Override
-			public void cleanUp(String correlationId) {
-				MDC.remove("correlationId");
-				
-			}
-		};
-	}
 }

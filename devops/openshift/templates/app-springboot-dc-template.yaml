@@ -26,12 +26,14 @@ objects:
             httpGet:
               path: /health
               port: ${{PORT}}
-              scheme: HTTP              
+              scheme: HTTP   
+            initialDelaySeconds: 10        
           readinessProbe:
             httpGet:
               path: /health
               port: ${{PORT}}
               scheme: HTTP
+            initialDelaySeconds: 10
           env:
             - name: PORT
               value:  "${PORT}"
