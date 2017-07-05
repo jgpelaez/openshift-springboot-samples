@@ -48,7 +48,7 @@ public class ZuulServerDiscoveryConfig {
 			if (!config.getUseEurekaServices()) {
 				for (String serviceId : serviceDiscovery.getServices()) {
 					String serviceName = serviceId.replaceAll(this.appPrefix, "");
-					String path = "/app/" + serviceName + "/**";
+					String path = "/" + config.getServicesPrefix() + "/" + serviceName + "/**";
 					CustomZuulRoute customZuulRoute = new CustomZuulRoute(config, serviceId, serviceName, serviceName,
 							path, null, null, true, false, null);
 					routes.put(path, customZuulRoute);

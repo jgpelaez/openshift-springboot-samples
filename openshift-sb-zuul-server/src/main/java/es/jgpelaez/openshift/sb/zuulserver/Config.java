@@ -7,18 +7,21 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "zuulserver")
 public class Config {
 
-	private Boolean useEurekaServices;
-
 	private Boolean localServices;
-
 	private Integer servicesPort;
+	private String servicesPrefix;
+	private Boolean useEurekaServices;
 
 	public Integer getServicesPort() {
 		return servicesPort;
 	}
 
-	public void setServicesPort(Integer servicesPort) {
-		this.servicesPort = servicesPort;
+	public String getServicesPrefix() {
+		return servicesPrefix;
+	}
+
+	public Boolean getUseEurekaServices() {
+		return useEurekaServices;
 	}
 
 	public Boolean isLocalServices() {
@@ -29,8 +32,12 @@ public class Config {
 		this.localServices = localServices;
 	}
 
-	public Boolean getUseEurekaServices() {
-		return useEurekaServices;
+	public void setServicesPort(Integer servicesPort) {
+		this.servicesPort = servicesPort;
+	}
+
+	public void setServicesPrefix(String servicesPrefix) {
+		this.servicesPrefix = servicesPrefix;
 	}
 
 	public void setUseEurekaServices(Boolean useEurekaServices) {

@@ -14,10 +14,6 @@ spring:
       ribbon:
         enabled: true
         
-#ribbon:
-#  eureka:
-#   enabled: false
-
 info:
   component: Zuul Server
   
@@ -28,6 +24,12 @@ endpoints:
     enabled: true
   health:
     sensitive: false
+
+zuulserver:
+  useEurekaServices: false
+  localServices: false
+  servicesPort: ${SERVICES_PORT:9000}
+  servicesPrefix: services 
 
 zuul:
   routes:
@@ -43,11 +45,6 @@ zuul:
         url: http://localhost:9000        
     customers: /customers/**
     zuulserver: /self/**
-
-zuulserver:
-  useEurekaServices: false
-  localServices: false
-  servicesPort: ${SERVICES_PORT:9000} 
 
 
 logging:
