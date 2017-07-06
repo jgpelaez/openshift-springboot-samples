@@ -26,12 +26,18 @@ endpoints:
     sensitive: false
 
 dynamiczuul:
+# we can disable the kubernetes service discovery and use Eureka
   useEurekaServices: false
+# For local development
   localServices: false
+# Default services port( by now all services should be in the same port)
   servicesPort: ${SERVICES_PORT:9000}
-  servicesPrefix: services 
+# Prefix for the url, for example: http://localhost:8765/services/openshift-sb-ms-store
+  servicesPrefix: services
+# If we want the url's to remove a prefix, for example for using http://localhost:8765/services/ms-store
+  removeAppPrefix: false   
   appPrefix: openshift-sb-
-  removeAppPrefix: false
+
 
 zuul:
   routes:

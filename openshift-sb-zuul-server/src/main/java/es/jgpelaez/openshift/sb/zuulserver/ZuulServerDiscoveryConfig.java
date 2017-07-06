@@ -122,8 +122,7 @@ public class ZuulServerDiscoveryConfig {
 	@Bean
 	@ConditionalOnMissingBean
 	public ServiceDiscovery discoveryService(KubernetesClient client) {
-		// return new ServiceDiscovery(client, properties);
-		// return new ServiceDiscovery();
+
 		return new ServiceDiscovery(client);
 	}
 

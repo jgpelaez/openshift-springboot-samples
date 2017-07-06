@@ -97,3 +97,4 @@ derby.log
 *.log
 **/resources/rebel.xml
 /makefile-data
+/.README.md.html
