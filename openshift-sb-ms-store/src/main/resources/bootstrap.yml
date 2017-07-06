@@ -5,8 +5,10 @@ spring:
     config:
       uri: ${CONFIG_SERVER_URI:http://localhost:8888/configserver/}
     kubernetes:
+      discovery:
+        enabled: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:true}
       secrets:
-        enabled: true
-        enableApi: true
+        enabled: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:true}
+        enableApi: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:true}
       reload:
-        enabled: true 
+        enabled: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:true}
