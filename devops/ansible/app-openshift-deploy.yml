@@ -24,7 +24,7 @@
       template_type: "is"
       resource_name: "openshift-sb-config-server"
       openshift_extra_params: >
-        -p SERVICE_NAME=openshift-sb-config-server
+        -p SERVICE_NAME=config-server
 
     - role: deploy-openshift-template
       template_name: "app-springboot-build-template.yaml"
@@ -32,7 +32,7 @@
       resource_name: "openshift-sb-config-server"
       openshift_extra_params: >
         -p SOURCE_CONTEXT_DIR=./openshift-sb-config-server
-        -p SERVICE_NAME=openshift-sb-config-server
+        -p SERVICE_NAME=config-server
         -p NAMESPACE={{ openshift_project_name }}
         -p GIT_SOURCE_URL={{ git_source_url }}
 
@@ -42,7 +42,9 @@
       resource_name: "openshift-sb-config-server"
       openshift_extra_params: >
         -p PORT=8888
-        -p SERVICE_NAME=openshift-sb-config-server
+        -p EUREKA_URI={{ eureka_uri }}
+        -p CONFIG_SERVER_URI={{ config_server_uri }}        
+        -p SERVICE_NAME=config-server
         -p APP_ARTIFACT_ID=openshift-sb-config-server
         -p APP_VERSION={{ app_version }}
 
@@ -52,7 +54,7 @@
       resource_name: "openshift-sb-config-server"
       openshift_extra_params: >
         -p PORT=8888 
-        -p SERVICE_NAME=openshift-sb-config-server
+        -p SERVICE_NAME=config-server
 
     - role: deploy-openshift-template
       template_name: "app-springboot-route-template.yaml"
@@ -60,7 +62,7 @@
       resource_name: "openshift-sb-config-server"
       openshift_extra_params: >
         -p ROUTE_HOST_PREFIX=openshift-sb-config-server
-        -p SERVICE_NAME=openshift-sb-config-server
+        -p SERVICE_NAME=config-server
         -p URL_SUFIX={{ url_sufix }}
 ########################################### 
 # - eureka
@@ -87,6 +89,7 @@
       openshift_extra_params: >
         -p PORT=8761 
         -p EUREKA_URI={{ eureka_uri }}
+        -p CONFIG_SERVER_URI={{ config_server_uri }}
         -p SERVICE_NAME=eureka
         -p APP_ARTIFACT_ID=openshift-sb-eureka
         -p APP_VERSION={{ app_version }}
@@ -131,6 +134,7 @@
       openshift_extra_params: >
         -p PORT=9000
         -p EUREKA_URI={{ eureka_uri }}
+        -p CONFIG_SERVER_URI={{ config_server_uri }}
         -p SERVICE_NAME=ms-customers
         -p APP_ARTIFACT_ID=openshift-sb-ms-customers
         -p APP_VERSION={{ app_version }}
@@ -195,6 +199,7 @@
       openshift_extra_params: >
         -p PORT=9000 
         -p EUREKA_URI={{ eureka_uri }}
+        -p CONFIG_SERVER_URI={{ config_server_uri }}
         -p SERVICE_NAME=ms-store
         -p APP_ARTIFACT_ID=openshift-sb-ms-store
         -p APP_VERSION={{ app_version }}
@@ -244,6 +249,7 @@
       openshift_extra_params: >
         -p PORT=8765 
         -p EUREKA_URI={{ eureka_uri }}
+        -p CONFIG_SERVER_URI={{ config_server_uri }}
         -p SERVICE_NAME=zuul-server
         -p APP_ARTIFACT_ID=openshift-sb-zuul-server
         -p APP_VERSION={{ app_version }}
@@ -275,7 +281,7 @@
       template_type: "is"
       resource_name: "openshift-sb-jwt-spring-security"
       openshift_extra_params: >
-        -p SERVICE_NAME=openshift-sb-jwt-spring-security
+        -p SERVICE_NAME=jwt-spring-security
 
     - role: deploy-openshift-template
       template_name: "app-springboot-build-template.yaml"
@@ -283,7 +289,7 @@
       resource_name: "openshift-sb-jwt-spring-security"
       openshift_extra_params: >
         -p SOURCE_CONTEXT_DIR=./openshift-sb-jwt-spring-security
-        -p SERVICE_NAME=openshift-sb-jwt-spring-security
+        -p SERVICE_NAME=jwt-spring-security
         -p NAMESPACE={{ openshift_project_name }}
         -p GIT_SOURCE_URL={{ git_source_url }}
 
@@ -294,7 +300,8 @@
       openshift_extra_params: >
         -p PORT=8765 
         -p EUREKA_URI={{ eureka_uri }}
-        -p SERVICE_NAME=openshift-sb-jwt-spring-security
+        -p CONFIG_SERVER_URI={{ config_server_uri }}
+        -p SERVICE_NAME=jwt-spring-security
         -p APP_ARTIFACT_ID=openshift-sb-jwt-spring-security
         -p APP_VERSION={{ app_version }}
 
@@ -304,7 +311,7 @@
       resource_name: "openshift-sb-jwt-spring-security"
       openshift_extra_params: >
         -p PORT=8765 
-        -p SERVICE_NAME=openshift-sb-jwt-spring-security
+        -p SERVICE_NAME=jwt-spring-security
 
     - role: deploy-openshift-template
       template_name: "app-springboot-route-template.yaml"
@@ -312,7 +319,7 @@
       resource_name: "openshift-sb-jwt-spring-security"
       openshift_extra_params: >
         -p ROUTE_HOST_PREFIX=openshift-sb-jwt-spring-security
-        -p SERVICE_NAME=openshift-sb-jwt-spring-security
+        -p SERVICE_NAME=jwt-spring-security
         -p URL_SUFIX={{ url_sufix }}
 
 

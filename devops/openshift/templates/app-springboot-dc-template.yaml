@@ -39,6 +39,8 @@ objects:
               value:  "${PORT}"
             - name: EUREKA_URI
               value:  "${EUREKA_URI}"
+            - name: CONFIG_SERVER_URI
+              value:  "${CONFIG_SERVER_URI}"
             - name: APP_ARTIFACT_ID
               value:  "${APP_ARTIFACT_ID}"
             - name: APP_VERSION
@@ -63,6 +65,8 @@ parameters:
 - name: PORT
   required: true
 - name: EUREKA_URI
+  required: true
+- name: CONFIG_SERVER_URI
   required: true  
 - name: IMAGE_VERSION
   value: latest
