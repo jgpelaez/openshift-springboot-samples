@@ -1,0 +1,22 @@
+my:
+  otherprop: myotherval
+  property: myvalue
+  
+configserverdata:
+  myconfig: myconfigdata
+  
+spring:
+  cloud:
+    kubernetes:
+      secrets:
+        enabled: true
+        enableApi: true
+      reload:
+        enabled: true
+        
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/}
+  instance:
+    preferIpAddress: true 

@@ -25,6 +25,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import es.jgpelaez.openshift.sb.ms.store.config.AppConfig;
+import es.jgpelaez.openshift.sb.ms.store.config.ConfigServerConfig;
 import es.jgpelaez.openshift.sb.ms.store.config.MyConfig;
 import es.jgpelaez.openshift.sb.ms.store.config.MySecrets;
 
@@ -40,22 +41,24 @@ public class MyBean {
 	private MyConfig config;
 	@Autowired
 	private MySecrets secrets;
-
+	@Autowired
+	private ConfigServerConfig configServerConfig;
 	@Autowired
 	AppConfig appConfig;
 
 	@Scheduled(fixedDelay = 10000)
 	public void hello() {
-		/*
+
 		logger.info("Message");
-		System.out.println("The message is: " + config.getMessage());
-		System.out.println("The UserName is: " + secrets.getUsername());
+		logger.info("The message is: " + config.getMessage());
+		logger.info("The UserName is: " + secrets.getUsername());
+		logger.info("The UserName is: " + environment.getProperty("secret.username"));
+		logger.info("The appConfig.dbUser is: " + appConfig.getDbUser());
+		logger.info("The password is: " + secrets.getPassword());
 
-		System.out.println("The UserName is: " + environment.getProperty("secret.username"));
-		System.out.println("The appConfig.dbUser is: " + appConfig.getDbUser());
+		logger.info("The password is: " + secrets.getPassword());
+		logger.info("configServerConfig.getMyconfig: " + configServerConfig.getMyconfig());
 
-		System.out.println("The password is: " + secrets.getPassword());
-*/
 	}
 
 }

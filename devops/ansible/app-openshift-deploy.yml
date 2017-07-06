@@ -17,6 +17,52 @@
         -p IMAGE_NAME=openshift/wildfly-101-centos7:latest
         -p IMAGE_TAG=10.1
 ########################################### 
+# - openshift-sb-config-server
+###########################################
+    - role: deploy-openshift-template
+      template_name: "app-springboot-is-template.yaml"
+      template_type: "is"
+      resource_name: "openshift-sb-config-server"
+      openshift_extra_params: >
+        -p SERVICE_NAME=openshift-sb-config-server
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-build-template.yaml"
+      template_type: "bc"
+      resource_name: "openshift-sb-config-server"
+      openshift_extra_params: >
+        -p SOURCE_CONTEXT_DIR=./openshift-sb-config-server
+        -p SERVICE_NAME=openshift-sb-config-server
+        -p NAMESPACE={{ openshift_project_name }}
+        -p GIT_SOURCE_URL={{ git_source_url }}
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-dc-template.yaml"
+      template_type: "dc"
+      resource_name: "openshift-sb-config-server"
+      openshift_extra_params: >
+        -p PORT=8888
+        -p SERVICE_NAME=openshift-sb-config-server
+        -p APP_ARTIFACT_ID=openshift-sb-config-server
+        -p APP_VERSION={{ app_version }}
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-service-template.yaml"
+      template_type: "service"
+      resource_name: "openshift-sb-config-server"
+      openshift_extra_params: >
+        -p PORT=8888 
+        -p SERVICE_NAME=openshift-sb-config-server
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-route-template.yaml"
+      template_type: "route"
+      resource_name: "openshift-sb-config-server"
+      openshift_extra_params: >
+        -p ROUTE_HOST_PREFIX=openshift-sb-config-server
+        -p SERVICE_NAME=openshift-sb-config-server
+        -p URL_SUFIX={{ url_sufix }}
+########################################### 
 # - eureka
 ###########################################
     - role: deploy-openshift-template
