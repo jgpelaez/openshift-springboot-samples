@@ -54,7 +54,7 @@ The project openshift-sb-config-server is an spring boot server. It is configure
 
 - Access: 
 
-http://<FQDN>/configserver/default
+http://[FQDN]/configserver/default
 
 ## Service Discovery (Eureka)
 
@@ -62,7 +62,7 @@ Eureka service discovery
 
 - Access: 
 
-http://<FQDN>/
+http://[FQDN]/
 
 ## Example microservices
 
@@ -72,7 +72,7 @@ Is a simple spring boot microservice.
 
 - Access: 
 
-http://<FQDN>/api/test
+http://[FQDN]/api/test
 
 ### Example microservice store
 
@@ -165,7 +165,9 @@ spring:
         enabled: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:true}
 ```
 
-!!! This configuration should be added in the bootstrap, it doesn't work in the application.yml or in the config server (that has been checked)
+<aside class="notice">
+This configuration should be added in the bootstrap, it doesn't work in the application.yml or in the config server (that has been checked)
+</aside>
 
 Finally we can read the properties in the applicacion.yml:
 
@@ -190,7 +192,7 @@ public class MySecrets {
 
 - Access: 
 
-http://<FQDN>/api/stores
+http://[FQDN]/api/stores
 
 # Zuul services gateway
 
@@ -198,5 +200,5 @@ http://<FQDN>/api/stores
 ## Testing it
 
 
-http://<FQDN>/services/openshift-sb-ms-store/api/stores
+http://[FQDN]/services/openshift-sb-ms-store/api/stores
 
