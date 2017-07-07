@@ -36,7 +36,7 @@
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
         -p PORT={{ app_port }} 
-        -p EUREKA_URI={{ jwt-spring-security_uri }}
+        -p EUREKA_URI={{ eureka_uri }}
         -p CONFIG_SERVER_URI={{ config_server_uri }}
         -p SERVICE_NAME={{ app_service_name }}
         -p APP_ARTIFACT_ID={{ app_resource_name }}
