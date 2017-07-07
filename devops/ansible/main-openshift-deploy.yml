@@ -1,0 +1,26 @@
+---
+
+- hosts: deploy-slave
+  tasks:
+  vars_files:
+    - ./vars/build-vars.yml
+
+  roles:
+########################################### 
+# - all
+###########################################
+    - role: deploy-openshift-template
+      template_name: "app-springboot-is-docker-template.yaml"
+      template_type: "is"
+      resource_name: "openshift-sb-wildfly"
+      openshift_extra_params: >
+        -p SERVICE_NAME=wildfly
+        -p IMAGE_NAME=openshift/wildfly-101-centos7:latest
+        -p IMAGE_TAG=10.1
+
+- include: app-config-server-openshift-deploy.yml
+- include: app-eureka-openshift-deploy.yml
+- include: app-zuul-server-openshift-deploy.yml
+- include: app-ms-customers-openshift-deploy.yml
+- include: app-ms-store-openshift-deploy.yml
+- include: app-jwt-spring-security-openshift-deploy.yml

@@ -19,7 +19,21 @@ add-permissions:  ## add permissions
 set-app:  ## login
 	cd devops/ansible; \
 		ansible-playbook \
-			app-openshift-deploy.yml \
+			main-openshift-deploy.yml \
+			-e openshift_token=${OPENSHIFT_TOKEN} \
+			-e openshift_url=${OPENSHIFT_URL}  \
+			-e openshift_project_name=${OS_PROJECT} \
+			-e build_namespace=${BUILD_NAMESPACE} \
+			-e build_image=${BUILD_IMAGE} \
+			-e redeploy_openshift_template=${REDEPLOY_OPENSHIFT_TEMPLATE} \
+			-e git_source_url=${GIT_SOURCE_URL} \
+			-e url_sufix=${URL_SUFIX} \
+			-i ./inventory/local
+			
+set-app-zuul:  ## login
+	cd devops/ansible; \
+		ansible-playbook \
+			app-zuul-openshift-deploy.yml \
 			-e openshift_token=${OPENSHIFT_TOKEN} \
 			-e openshift_url=${OPENSHIFT_URL}  \
 			-e openshift_project_name=${OS_PROJECT} \
@@ -27,6 +41,7 @@ set-app:  ## login
 			-e git_source_url=${GIT_SOURCE_URL} \
 			-e url_sufix=${URL_SUFIX} \
 			-i ./inventory/local
+	
 	
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

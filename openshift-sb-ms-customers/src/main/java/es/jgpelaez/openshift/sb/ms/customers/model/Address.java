@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package es.jgpelaez.openshift.sb.ms.customers;
+package es.jgpelaez.openshift.sb.ms.customers.model;
+
+
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -24,12 +26,16 @@ import lombok.Value;
 @Value
 //@Embeddable
 @AllArgsConstructor
-public class Location {
+public class Address {
 
-	private final double latitude, longitude;
+	private final String street, zipCode, city;
+	private final Location location;
 
-	protected Location() {
-		this.latitude = 0.0;
-		this.longitude = 0.0;
+	protected Address() {
+
+		this.street = null;
+		this.zipCode = null;
+		this.city = null;
+		this.location = null;
 	}
 }

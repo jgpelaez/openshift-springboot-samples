@@ -1,0 +1,61 @@
+---
+
+- hosts: deploy-slave
+  tasks:
+  vars:
+    app_resource_name: openshift-sb-jwt-spring-security  
+    app_service_name: jwt-spring-security
+    app_port: 8765  
+  vars_files:
+    - ./vars/build-vars.yml
+  roles:
+########################################### 
+# - jwt-spring-security
+###########################################
+    - role: deploy-openshift-template
+      template_name: "app-springboot-is-template.yaml"
+      template_type: "is"
+      resource_name: "{{ app_resource_name }}"
+      openshift_extra_params: ""
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-build-template.yaml"
+      template_type: "bc"
+      resource_name: "{{ app_resource_name }}"
+      openshift_extra_params: >
+        -p SOURCE_CONTEXT_DIR=./
+        -p SERVICE_NAME={{ app_service_name }}
+        -p NAMESPACE={{ openshift_project_name }}
+        -p BUILD_NAMESPACE={{ build_namespace }}
+        -p BUILD_IMAGE={{ build_image }}
+        -p GIT_SOURCE_URL={{ git_source_url }}
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-dc-template.yaml"
+      template_type: "dc"
+      resource_name: "{{ app_resource_name }}"
+      openshift_extra_params: >
+        -p PORT={{ app_port }} 
+        -p EUREKA_URI={{ jwt-spring-security_uri }}
+        -p CONFIG_SERVER_URI={{ config_server_uri }}
+        -p SERVICE_NAME={{ app_service_name }}
+        -p APP_ARTIFACT_ID={{ app_resource_name }}
+        -p APP_VERSION={{ app_version }}
+
+    - role: deploy-openshift-template
+      template_name: "app-springboot-service-template.yaml"
+      template_type: "service"
+      resource_name: "{{ app_resource_name }}"
+      openshift_extra_params: >
+        -p PORT={{ app_port }}
+        -p SERVICE_NAME={{ app_service_name }}
+    - role: deploy-openshift-template
+      template_name: "app-springboot-route-template.yaml"
+      template_type: "route"
+      resource_name: "{{ app_resource_name }}"
+      openshift_extra_params: >
+        -p ROUTE_HOST_PREFIX={{ app_resource_name }}
+        -p SERVICE_NAME={{ app_service_name }}
+        -p URL_SUFIX={{ url_sufix }}
+
+  

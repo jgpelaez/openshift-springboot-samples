@@ -26,8 +26,8 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          namespace: ${NAMESPACE}
-          name: 'openshift-sb-wildfly:10.1'
+          namespace: ${BUILD_NAMESPACE}
+          name: ${BUILD_IMAGE}
         incremental: true
     output:
       to:
@@ -42,5 +42,10 @@ parameters:
   required: true
 - name: NAMESPACE
   required: true
+- name: BUILD_NAMESPACE
+  required: true
+- name: BUILD_IMAGE
+  value: openshift-sb-wildfly:10.1
+
 - name: GIT_SOURCE_URL
   required: true

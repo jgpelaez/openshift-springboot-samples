@@ -17,43 +17,16 @@ package es.jgpelaez.openshift.sb.ms.customers;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Oliver Gierke
  */
 @SpringBootApplication
-// @EnableCircuitBreaker
+//@EnableCircuitBreaker
 @EnableDiscoveryClient
-@RestController
 public class CustomerApp {
-	@RequestMapping("/")
-	@ResponseBody
-	String home(@RequestHeader(value = "User-Agent") String userAgent,
-			@RequestHeader(name = "Test-Header", required = false) String testHeader) {
-		// @RequestHeader("testHeader") String testHeader
-		// String testHeader=headers.getFirst("testHeader");
-		// String testHeader = "";
-		String template = " [Header: Test-Header=%s]";
-		StringBuffer message = new StringBuffer("customer");
-		if (testHeader != null) {
-			message.append(String.format(template, testHeader));
-		}
-
-		return message.toString();
-	}
-	@RequestMapping("/api/test")
-	@ResponseBody
-	String apiTest() {
-		
-
-		return "customers/api/test";
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(CustomerApp.class, args);
 	}
