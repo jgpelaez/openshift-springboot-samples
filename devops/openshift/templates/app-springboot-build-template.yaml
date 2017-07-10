@@ -19,6 +19,7 @@ objects:
         uri: ${GIT_SOURCE_URL}
         ref: master
       contextDir: ${SOURCE_CONTEXT_DIR}
+      
 #      sourceSecret:
 #        name: bitbucket-rsa
     strategy:
@@ -37,7 +38,7 @@ parameters:
 - name: SERVICE_NAME
   value: eureka  
 - name: APP_NAME
-  value: openshift-sb
+  required: true
 - name: SOURCE_CONTEXT_DIR
   required: true
 - name: NAMESPACE

@@ -21,7 +21,7 @@ objects:
 parameters:
 - name: SERVICE_NAME
 - name: APP_NAME
-  value: openshift-sb
+  required: true
 - name: IMAGE_NAME
   required: true
 - name: IMAGE_TAG

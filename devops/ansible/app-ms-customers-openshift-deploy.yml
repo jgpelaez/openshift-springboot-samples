@@ -3,7 +3,7 @@
 - hosts: deploy-slave
   tasks:
   vars:
-    app_resource_name: openshift-sb-ms-customers  
+    app_resource_name: "{{ app_name }}-ms-customers"
     app_service_name: ms-customers
     app_port: 9000  
   vars_files:
@@ -25,7 +25,7 @@
       template_type: "bc"
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
-        -p SOURCE_CONTEXT_DIR=./
+        -p SOURCE_CONTEXT_DIR=./{{ app_resource_name }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
         -p NAMESPACE={{ openshift_project_name }}
@@ -59,6 +59,7 @@
       template_type: "route"
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
+        -p NAMESPACE={{ openshift_project_name }}
         -p ROUTE_HOST_PREFIX={{ app_resource_name }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}

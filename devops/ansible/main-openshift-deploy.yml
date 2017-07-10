@@ -2,6 +2,8 @@
 
 - hosts: deploy-slave
   tasks:
+  vars:
+    app_resource_name: lg-wildfly
   vars_files:
     - ./vars/build-vars.yml
 
@@ -12,8 +14,9 @@
     - role: deploy-openshift-template
       template_name: "app-springboot-is-docker-template.yaml"
       template_type: "is"
-      resource_name: "openshift-sb-wildfly"
+      resource_name: "{{ app_name }}-wildfly"
       openshift_extra_params: >
+        -p APP_NAME={{ app_name }}
         -p SERVICE_NAME=wildfly
         -p IMAGE_NAME=openshift/wildfly-101-centos7:latest
         -p IMAGE_TAG=10.1

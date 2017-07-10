@@ -58,4 +58,4 @@ zuul:
 logging:
   level:
     ROOT: INFO
-    org.springframework.web: DEBUG
+    org.springframework.web: INFO

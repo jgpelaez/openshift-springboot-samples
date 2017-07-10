@@ -3,7 +3,7 @@
 - hosts: deploy-slave
   tasks:
   vars:
-    app_resource_name: openshift-sb-eureka  
+    app_resource_name: "{{ app_name }}-eureka"
     app_service_name: eureka
     app_port: 8761  
   vars_files:
@@ -25,7 +25,7 @@
       template_type: "bc"
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
-        -p SOURCE_CONTEXT_DIR=./
+        -p SOURCE_CONTEXT_DIR=./{{ app_resource_name }}
         -p NAMESPACE={{ openshift_project_name }}
         -p BUILD_NAMESPACE={{ build_namespace }}
         -p BUILD_IMAGE={{ build_image }}
@@ -60,6 +60,7 @@
       template_type: "route"
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
+        -p NAMESPACE={{ openshift_project_name }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
         -p ROUTE_HOST_PREFIX={{ app_resource_name }}

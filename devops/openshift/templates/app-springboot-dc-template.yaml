@@ -22,13 +22,14 @@ objects:
       spec:
         containers:
         - name: ${APP_NAME}-${SERVICE_NAME}
+          image:
           resources:
             requests:
-              cpu: "250m"
-              memory: "500Mi"
+              cpu: 250m
+              memory: "512Mi"
             limits:
-              cpu: "1"
-              memory: "1Gi"
+              cpu: '2'
+              memory: "1024Mi"
           livenessProbe:
             httpGet:
               path: /health
@@ -52,6 +53,8 @@ objects:
               value:  "${APP_ARTIFACT_ID}"
             - name: APP_VERSION
               value:  "${APP_VERSION}"
+            - name: JAVA_OPTIONS
+              value: '-Xms${APP_REQUEST_MEMORY_MI}m -Xmx${APP_LIMIT_MEMORY_MI}m'
 
     triggers:
     - imageChangeParams:
@@ -68,7 +71,7 @@ parameters:
 - name: SERVICE_NAME
   required: true  
 - name: APP_NAME
-  value: openshift-sb
+  required: true
 - name: PORT
   required: true
 - name: EUREKA_URI
@@ -85,3 +88,7 @@ parameters:
   required: true
 - name: APP_VERSION
   required: true
+- name: APP_REQUEST_MEMORY_MI
+  value: "512"
+- name: APP_LIMIT_MEMORY_MI
+  value: "1024"

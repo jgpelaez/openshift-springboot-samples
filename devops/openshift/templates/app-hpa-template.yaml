@@ -16,8 +16,8 @@ objects:
       name: ${APP_NAME}-${SERVICE_NAME}
       apiVersion: extensions/v1beta1
       subresource: scale
-    minReplicas: 2
-    maxReplicas: 5
+    minReplicas: ${{HPA_MIN_REPLICAS}}
+    maxReplicas: ${{HPA_MAX_REPLICAS}}
     cpuUtilization:
       targetPercentage: 80    
 parameters:
@@ -27,6 +27,10 @@ parameters:
   value: app
 - name: SERVICE_NAME
   value: app
+- name: HPA_MIN_REPLICAS
+  value: "1"
+- name: HPA_MAX_REPLICAS
+  value: "4"
 - name: IMAGE_VERSION
   value: latest
 - name: NAMESPACE

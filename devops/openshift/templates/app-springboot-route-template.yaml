@@ -22,7 +22,7 @@ parameters:
 - name: SERVICE_NAME
   value: eureka
 - name: APP_NAME
-  value: openshift-sb
+  required: true
 - name: ROUTE_HOST_PREFIX
   value: openshift-sb-eureka
 - name: NAMESPACE
