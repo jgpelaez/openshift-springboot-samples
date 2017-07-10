@@ -3,7 +3,7 @@
 
 
 export REDEPLOY_OPENSHIFT_TEMPLATE?=false
-
+export APP_NAME?=openshift-sb
 
 login-openshift:  ## login openshift-sb environment
 	oc login ${OPENSHIFT_URL} -u ${OPENSHIFT_USER}
@@ -23,6 +23,7 @@ set-app:  ## login
 			-e openshift_token=${OPENSHIFT_TOKEN} \
 			-e openshift_url=${OPENSHIFT_URL}  \
 			-e openshift_project_name=${OS_PROJECT} \
+			-e app_name=${APP_NAME} \
 			-e build_namespace=${BUILD_NAMESPACE} \
 			-e build_image=${BUILD_IMAGE} \
 			-e redeploy_openshift_template=${REDEPLOY_OPENSHIFT_TEMPLATE} \
@@ -33,10 +34,11 @@ set-app:  ## login
 set-app-zuul:  ## login
 	cd devops/ansible; \
 		ansible-playbook \
-			app-zuul-openshift-deploy.yml \
+			app-zuul-server-openshift-deploy.yml \
 			-e openshift_token=${OPENSHIFT_TOKEN} \
 			-e openshift_url=${OPENSHIFT_URL}  \
 			-e openshift_project_name=${OS_PROJECT} \
+			-e app_name=${APP_NAME} \
 			-e redeploy_openshift_template=${REDEPLOY_OPENSHIFT_TEMPLATE} \
 			-e git_source_url=${GIT_SOURCE_URL} \
 			-e url_sufix=${URL_SUFIX} \

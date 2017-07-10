@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: app-hpa-template
+metadata:
+  name: app-hpa
+objects: 
+- apiVersion: extensions/v1beta1
+  kind: HorizontalPodAutoscaler
+  metadata:
+    creationTimestamp: null
+    name: ${APP_NAME}-${SERVICE_NAME}
+  spec:
+    scaleRef:
+      kind: DeploymentConfig
+      name: ${APP_NAME}-${SERVICE_NAME}
+      apiVersion: extensions/v1beta1
+      subresource: scale
+    minReplicas: 2
+    maxReplicas: 5
+    cpuUtilization:
+      targetPercentage: 80    
+parameters:
+- description: The name of the OpenShift Service exposed for the  container.
+  displayName: Service Name
+  name: APP_NAME
+  value: app
+- name: SERVICE_NAME
+  value: app
+- name: IMAGE_VERSION
+  value: latest
+- name: NAMESPACE
+  required: true

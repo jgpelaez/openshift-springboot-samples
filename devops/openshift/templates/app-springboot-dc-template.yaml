@@ -22,18 +22,25 @@ objects:
       spec:
         containers:
         - name: ${APP_NAME}-${SERVICE_NAME}
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "500Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
           livenessProbe:
             httpGet:
               path: /health
               port: ${{PORT}}
               scheme: HTTP   
-            initialDelaySeconds: 10        
+            initialDelaySeconds: 20
           readinessProbe:
             httpGet:
               path: /health
               port: ${{PORT}}
               scheme: HTTP
-            initialDelaySeconds: 10
+            initialDelaySeconds: 20
           env:
             - name: PORT
               value:  "${PORT}"
@@ -72,6 +79,8 @@ parameters:
   value: latest
 - name: NUM_REPLICAS
   value: "1"
+- name: CHECKS_INITIAL_DELAY_SECONDS
+  value: "10"
 - name: APP_ARTIFACT_ID
   required: true
 - name: APP_VERSION

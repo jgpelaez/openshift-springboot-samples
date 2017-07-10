@@ -16,7 +16,9 @@
       template_name: "app-springboot-is-template.yaml"
       template_type: "is"
       resource_name: "{{ app_resource_name }}"
-      openshift_extra_params: ""
+      openshift_extra_params: >
+        -p APP_NAME={{ app_name }}
+        -p SERVICE_NAME={{ app_service_name }}
 
     - role: deploy-openshift-template
       template_name: "app-springboot-build-template.yaml"
@@ -24,6 +26,7 @@
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
         -p SOURCE_CONTEXT_DIR=./
+        -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
         -p NAMESPACE={{ openshift_project_name }}
         -p BUILD_NAMESPACE={{ build_namespace }}
@@ -38,7 +41,9 @@
         -p PORT={{ app_port }} 
         -p EUREKA_URI={{ eureka_uri }}
         -p CONFIG_SERVER_URI={{ config_server_uri }}
+        -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
+        -p APP_NAME={{ app_name }}
         -p APP_ARTIFACT_ID={{ app_resource_name }}
         -p APP_VERSION={{ app_version }}
 
@@ -48,6 +53,7 @@
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
         -p PORT={{ app_port }}
+        -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
     - role: deploy-openshift-template
       template_name: "app-springboot-route-template.yaml"
@@ -55,7 +61,16 @@
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
         -p ROUTE_HOST_PREFIX={{ app_resource_name }}
+        -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
         -p URL_SUFIX={{ url_sufix }}
 
+    - role: deploy-openshift-template
+      template_name: "app-hpa-template.yaml"
+      template_type: "hpa"
+      resource_name: "{{ app_resource_name }}"
+      openshift_extra_params: >
+        -p APP_NAME={{ app_name }}
+        -p SERVICE_NAME={{ app_service_name }}
+        -p NAMESPACE={{ openshift_project_name }}
   
