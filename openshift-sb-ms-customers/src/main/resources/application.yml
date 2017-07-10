@@ -1,2 +1,12 @@
 server:
   port: ${PORT:9000}
+
+endpoints:
+  actuator:
+    path: /mngmt/actuator
+  env:
+    path: /mngmt/env
+  health:
+    path: /mngmt/health
+  info:
+    path: /mngmt/info

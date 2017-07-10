@@ -39,6 +39,7 @@
       template_type: "dc"
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
+        -p BUILD_NAMESPACE={{ build_namespace }}
         -p PORT={{ app_port }} 
         -p EUREKA_URI={{ eureka_uri }}
         -p CONFIG_SERVER_URI={{ config_server_uri }}

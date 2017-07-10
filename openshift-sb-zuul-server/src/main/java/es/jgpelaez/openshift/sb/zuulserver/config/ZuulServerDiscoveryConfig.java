@@ -51,14 +51,17 @@ public class ZuulServerDiscoveryConfig {
 			log.debug("testconfig: " + config.getTestConfig());
 			if (!config.isUseEurekaServices()) {
 				for (String serviceId : serviceDiscovery.getServices()) {
-					String serviceName = serviceId;
-					String customServiceId = config.getServiceId(serviceId);
+					String serviceName = config.getServiceId(serviceId);
+					String customServiceId = serviceId;
 					if (config.isRemoveAppPrefix()) {
 						serviceName = serviceName.replaceAll(this.config.getAppPrefix(), "");
 					}
 					String path = "/" + config.getServicesPrefix() + "/" + serviceName + "/**";
 					CustomZuulRoute customZuulRoute = new CustomZuulRoute(config, customServiceId, serviceName, serviceName,
 							path, null, null, true, false, null);
+					if (routes.get(path) !=null) {
+						routes.remove(path);
+					}
 					routes.put(path, customZuulRoute);
 				}
 			}

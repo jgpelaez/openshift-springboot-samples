@@ -33,7 +33,7 @@ public class DynamicZuulConfig {
 	}
 
 	public String getServiceId(String serviceId) {
-		String propId = "dynamiczuul.customRoutes." + serviceId + ".customServiceId";
+		String propId = "dynamiczuul.customRoutes." + serviceId + ".serviceId";
 		if (env.getProperty(propId) != null) {
 			return env.getProperty(propId);
 		}

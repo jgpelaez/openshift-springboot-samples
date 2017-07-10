@@ -8,20 +8,22 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: "${APP_NAME}-${SERVICE_NAME}"
+    name: "${APP_NAME}-${SERVICE_NAME}${DEPLOYMENT_TYPE_SUFIX}"
   spec:
     ports:
-    - name: ${APP_NAME}-${SERVICE_NAME}
+    - name: ${APP_NAME}-${SERVICE_NAME}${DEPLOYMENT_TYPE_SUFIX}
       protocol: TCP
       port: ${{PORT}}
       targetPort: ${{PORT}}
     selector:
-      name: "${APP_NAME}-${SERVICE_NAME}"
+      name: "${APP_NAME}-${SERVICE_NAME}${DEPLOYMENT_TYPE_SUFIX}"
 
 parameters:
 - name: SERVICE_NAME
   value: eureka  
 - name: APP_NAME
   required: true
+- name: DEPLOYMENT_TYPE_SUFIX
+  value: ""
 - name: PORT
   required: true

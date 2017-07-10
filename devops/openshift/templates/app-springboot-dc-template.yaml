@@ -8,21 +8,20 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    name: ${APP_NAME}-${SERVICE_NAME}
+    name: ${APP_NAME}-${SERVICE_NAME}${DEPLOYMENT_TYPE_SUFIX}
   spec:
     replicas: ${NUM_REPLICAS}
     selector:
-      name: ${APP_NAME}-${SERVICE_NAME}
+      name: ${APP_NAME}-${SERVICE_NAME}${DEPLOYMENT_TYPE_SUFIX}
     strategy:
       type: Rolling
     template:
       metadata:
         labels:
-          name: ${APP_NAME}-${SERVICE_NAME}
+          name: ${APP_NAME}-${SERVICE_NAME}${DEPLOYMENT_TYPE_SUFIX}
       spec:
         containers:
-        - name: ${APP_NAME}-${SERVICE_NAME}
-          image:
+        - name: ${APP_NAME}-${SERVICE_NAME}${DEPLOYMENT_TYPE_SUFIX}
           resources:
             requests:
               cpu: 250m
@@ -32,13 +31,13 @@ objects:
               memory: "1024Mi"
           livenessProbe:
             httpGet:
-              path: /health
+              path: ${HEALTH_PATH}
               port: ${{PORT}}
               scheme: HTTP   
             initialDelaySeconds: 20
           readinessProbe:
             httpGet:
-              path: /health
+              path: ${HEALTH_PATH}
               port: ${{PORT}}
               scheme: HTTP
             initialDelaySeconds: 20
@@ -71,12 +70,14 @@ objects:
     - type: ConfigChange
     
 parameters:
+- name: BUILD_NAMESPACE
+  required: true  
 - name: SERVICE_NAME
   required: true  
 - name: APP_NAME
   required: true
-- name: BUILD_NAMESPACE
-  required: true  
+- name: DEPLOYMENT_TYPE_SUFIX
+  value: ""
 - name: PORT
   required: true
 - name: EUREKA_URI
@@ -97,3 +98,5 @@ parameters:
   value: "512"
 - name: APP_LIMIT_MEMORY_MI
   value: "1024"
+- name: HEALTH_PATH
+  value: "/health"

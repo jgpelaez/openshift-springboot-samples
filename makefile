@@ -4,6 +4,7 @@
 
 export REDEPLOY_OPENSHIFT_TEMPLATE?=false
 export APP_NAME?=openshift-sb
+export DEPLOYMENT_TYPE_SUFIX=
 export ANSIBLE_PLAYBOOK?=main-openshift-deploy.yml
 
 login-openshift:  ## login openshift-sb environment
@@ -26,6 +27,7 @@ set-app:  ## login
 			-e openshift_project_name=${OS_PROJECT} \
 			-e app_name=${APP_NAME} \
 			-e app_port=${APP_PORT} \
+			-e deployment_type_sufix=${DEPLOYMENT_TYPE_SUFIX} \
 			-e build_namespace=${BUILD_NAMESPACE} \
 			-e build_image=${BUILD_IMAGE} \
 			-e eureka_uri=${EUREKA_URI} \
@@ -44,6 +46,7 @@ set-app-zuul:  ## login
 			-e openshift_project_name=${OS_PROJECT} \
 			-e app_name=${APP_NAME} \
 			-e app_port=${APP_PORT} \
+			-e deployment_type_sufix=${DEPLOYMENT_TYPE_SUFIX} \
 			-e build_namespace=${BUILD_NAMESPACE} \
 			-e build_image=${BUILD_IMAGE} \
 			-e redeploy_openshift_template=${REDEPLOY_OPENSHIFT_TEMPLATE} \

@@ -18,12 +18,14 @@ info:
   component: Zuul Server
   
 endpoints:
-  restart:
-    enabled: true
-  shutdown:
-    enabled: true
+  actuator:
+    path: /mngmt/actuator
+  env:
+    path: /mngmt/env
   health:
-    sensitive: false
+    path: /mngmt/health
+  info:
+    path: /mngmt/info
 
 dynamiczuul:
 # we can disable the kubernetes service discovery and use Eureka
@@ -40,8 +42,8 @@ dynamiczuul:
 # Custom routes, if we want to use a different name for a service, for example to use a blue green deployment
 # can be specified here
   customRoutes:
-    lg-ms-customers:
-        customServiceId: lg-ms-customersgreen
+    lg-ms-customersblue:
+        serviceId: lg-ms-customers
 
 logging:
   level:

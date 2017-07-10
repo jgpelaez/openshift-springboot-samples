@@ -3,6 +3,7 @@
 - hosts: deploy-slave
   tasks:
   vars:
+    deployment_type_sufix: ""
     app_service_name: ms-customers
     app_port: 9000
     source_context_dir: "openshift-sb-{{ app_service_name }}"  
@@ -37,24 +38,27 @@
     - role: deploy-openshift-template
       template_name: "app-springboot-dc-template.yaml"
       template_type: "dc"
-      resource_name: "{{ app_resource_name }}"
+      resource_name: "{{ app_resource_name }}{{ deployment_type_sufix }}"
       openshift_extra_params: >
+        -p BUILD_NAMESPACE={{ build_namespace }}
         -p PORT={{ app_port }} 
         -p EUREKA_URI={{ eureka_uri }}
         -p CONFIG_SERVER_URI={{ config_server_uri }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
+        -p DEPLOYMENT_TYPE_SUFIX={{ deployment_type_sufix }}
         -p APP_ARTIFACT_ID={{ app_resource_name }}
         -p APP_VERSION={{ app_version }}
 
     - role: deploy-openshift-template
       template_name: "app-springboot-service-template.yaml"
       template_type: "service"
-      resource_name: "{{ app_resource_name }}"
+      resource_name: "{{ app_resource_name }}{{ deployment_type_sufix }}"
       openshift_extra_params: >
         -p PORT={{ app_port }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
+        -p DEPLOYMENT_TYPE_SUFIX={{ deployment_type_sufix }}
     - role: deploy-openshift-template
       template_name: "app-springboot-route-template.yaml"
       template_type: "route"

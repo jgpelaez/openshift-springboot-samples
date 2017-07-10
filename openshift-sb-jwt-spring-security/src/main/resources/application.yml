@@ -25,7 +25,12 @@ jwt:
       path: auth
       refresh: refresh
 
-#logging:
-#  level:
-#    org.springframework:
-#      security: DEBUG
+endpoints:
+  actuator:
+    path: /mngmt/actuator
+  env:
+    path: /mngmt/env
+  health:
+    path: /mngmt/health
+  info:
+    path: /mngmt/info
