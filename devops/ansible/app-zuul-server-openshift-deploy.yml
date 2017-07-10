@@ -3,9 +3,10 @@
 - hosts: deploy-slave
   tasks:
   vars:
-    app_resource_name: "{{ app_name }}-zuul-server"
     app_service_name: zuul-server
     app_port: 8765
+    source_context_dir: "openshift-sb-{{ app_service_name }}"  
+    app_resource_name: "{{ app_name }}-{{ app_service_name }}"
   vars_files:
     - ./vars/build-vars.yml
   roles:
@@ -25,7 +26,7 @@
       template_type: "bc"
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
-        -p SOURCE_CONTEXT_DIR=./{{ app_resource_name }}
+        -p SOURCE_CONTEXT_DIR=./{{ source_context_dir }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
         -p NAMESPACE={{ openshift_project_name }}
