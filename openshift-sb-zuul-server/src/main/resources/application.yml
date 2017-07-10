@@ -37,7 +37,11 @@ dynamiczuul:
 # If we want the url's to remove a prefix, for example for using http://localhost:8765/services/ms-store
   removeAppPrefix: false   
   appPrefix: openshift-sb-
-
+# Custom routes, if we want to use a different name for a service, for example to use a blue green deployment
+# can be specified here
+  customRoutes:
+    lg-ms-customers:
+        customServiceId: lg-ms-customersgreen
 
 logging:
   level:

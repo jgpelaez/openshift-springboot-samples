@@ -3,8 +3,8 @@
 - hosts: deploy-slave
   tasks:
   vars:
-    app_resource_name: "{{ app_name }}-ms-store"
-    app_port: 9000  
+    app_service_name: ms-store
+    app_port: 9000
     source_context_dir: "openshift-sb-{{ app_service_name }}"  
     app_resource_name: "{{ app_name }}-{{ app_service_name }}"
   vars_files:

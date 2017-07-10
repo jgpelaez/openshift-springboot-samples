@@ -1,69 +1,42 @@
 package es.jgpelaez.openshift.sb.zuulserver.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import lombok.Data;
 
 @Component
 @ConfigurationProperties(prefix = "dynamiczuul")
+@Data
 public class DynamicZuulConfig {
 
+	@Autowired
+	Environment env;
 	private String appPrefix;
-	private Boolean localServices;
-	private Boolean removeAppPrefix;
+	private boolean localServices;
+	private boolean removeAppPrefix;
 	private Integer servicesPort;
 	private String servicesPrefix;
 
-	private Boolean useEurekaServices;
+	private boolean useEurekaServices;
 
-	public String getAppPrefix() {
-		return appPrefix;
-	}
+	private String testConfig;
 
-	public Boolean getLocalServices() {
-		return localServices;
-	}
+	public boolean isUseEurekaServices() {
+		if ("false".equals(env.getProperty("spring.cloud.kubernetes.discovery.enabled"))) {
+			return true;
+		}
 
-	public Boolean getRemoveAppPrefix() {
-		return removeAppPrefix;
-	}
-
-	public Integer getServicesPort() {
-		return servicesPort;
-	}
-
-	public String getServicesPrefix() {
-		return servicesPrefix;
-	}
-
-	public Boolean getUseEurekaServices() {
 		return useEurekaServices;
 	}
 
-	public Boolean isLocalServices() {
-		return localServices;
-	}
-
-	public void setAppPrefix(String appPrefix) {
-		this.appPrefix = appPrefix;
-	}
-
-	public void setLocalServices(Boolean localServices) {
-		this.localServices = localServices;
-	}
-
-	public void setRemoveAppPrefix(Boolean removeAppPrefix) {
-		this.removeAppPrefix = removeAppPrefix;
-	}
-
-	public void setServicesPort(Integer servicesPort) {
-		this.servicesPort = servicesPort;
-	}
-
-	public void setServicesPrefix(String servicesPrefix) {
-		this.servicesPrefix = servicesPrefix;
-	}
-
-	public void setUseEurekaServices(Boolean useEurekaServices) {
-		this.useEurekaServices = useEurekaServices;
+	public String getServiceId(String serviceId) {
+		String propId = "dynamiczuul.customRoutes." + serviceId + ".customServiceId";
+		if (env.getProperty(propId) != null) {
+			return env.getProperty(propId);
+		}
+		return serviceId;
 	}
 }

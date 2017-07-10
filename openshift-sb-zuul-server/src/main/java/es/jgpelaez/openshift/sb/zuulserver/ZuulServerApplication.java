@@ -41,7 +41,7 @@ public class ZuulServerApplication {
 
 	@Bean
 	public ServiceRouteMapper serviceRouteMapper() {
-		if (config.getUseEurekaServices()) {
+		if (config.isUseEurekaServices()) {
 			return new PatternServiceRouteMapper("(?<name>)", config.getServicesPrefix() + "/${name}");
 		} else {
 			return new SimpleServiceRouteMapper();

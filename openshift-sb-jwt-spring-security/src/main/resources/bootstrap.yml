@@ -3,5 +3,13 @@ spring:
     name: openshift-sb-jwt-spring-security
   cloud:
     config:
-      uri: ${vcap.services.${PREFIX:}configserver.credentials.uri:http://user:password@localhost:8888}
+      uri: ${CONFIG_SERVER_URI:http://localhost:8888/configserver/}
+    kubernetes:
+      discovery:
+        enabled: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:false}
+      secrets:
+        enabled: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:false}
+        enableApi: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:false}
+      reload:
+        enabled: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:false}
       

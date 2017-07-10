@@ -6,3 +6,13 @@ spring:
      name: configserver
   profiles:
      active: native
+     
+endpoints:
+  actuator:
+    path: /mngmt/actuator
+  env:
+    path: /mngmt/env
+  health:
+    path: /mngmt/health
+  info:
+    path: /mngmt/info

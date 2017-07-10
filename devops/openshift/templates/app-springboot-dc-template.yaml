@@ -65,6 +65,7 @@ objects:
         - ${APP_NAME}-${SERVICE_NAME}
         from:
           kind: ImageStreamTag
+          namespace: ${BUILD_NAMESPACE}
           name: ${APP_NAME}-${SERVICE_NAME}:${IMAGE_VERSION}
       type: ImageChange
     - type: ConfigChange
@@ -74,6 +75,8 @@ parameters:
   required: true  
 - name: APP_NAME
   required: true
+- name: BUILD_NAMESPACE
+  required: true  
 - name: PORT
   required: true
 - name: EUREKA_URI
@@ -85,7 +88,7 @@ parameters:
 - name: NUM_REPLICAS
   value: "1"
 - name: CHECKS_INITIAL_DELAY_SECONDS
-  value: "10"
+  value: "20"
 - name: APP_ARTIFACT_ID
   required: true
 - name: APP_VERSION

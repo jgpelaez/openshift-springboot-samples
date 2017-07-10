@@ -5,15 +5,18 @@ my:
 configserverdata:
   myconfig: myconfigdata
   
-spring:
-  cloud:
-    kubernetes:
-      secrets:
-        enabled: true
-        enableApi: true
-      reload:
-        enabled: true
-        
+dynamiczuul:
+  testConfig: "Test value"
+endpoints:
+  actuator:
+    path: /mngmt/actuator
+  env:
+    path: /mngmt/env
+  health:
+    path: /mngmt/health
+  info:
+    path: /mngmt/info
+
 eureka:
   client:
     serviceUrl:

@@ -1,7 +1,6 @@
-package es.jgpelaez.openshift.sb.zuulserver;
+package es.jgpelaez.openshift.sb.zuulserver.config;
 
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,9 +16,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 
-import es.jgpelaez.openshift.sb.zuulserver.config.DynamicZuulConfig;
+import es.jgpelaez.openshift.sb.zuulserver.ZuulServerApplication;
 import es.jgpelaez.openshift.sb.zuulserver.k8s.ServiceDiscovery;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Juan Carlos García Peláez
@@ -28,6 +28,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 @Configuration
 @Import({ ZuulServerApplication.class })
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@Slf4j
 public class ZuulServerDiscoveryConfig {
 
 	public static class CustomDiscoveryClientRouteLocator extends DiscoveryClientRouteLocator {
@@ -40,65 +41,29 @@ public class ZuulServerDiscoveryConfig {
 				ServiceRouteMapper serviceRouteMapper) {
 			super(servletPath, discovery, properties, serviceRouteMapper);
 			this.serviceDiscovery = serviceDiscovery;
-
 			this.config = config;
 		}
 
 		@Override
 		protected LinkedHashMap<String, ZuulRoute> locateRoutes() {
 			LinkedHashMap<String, ZuulRoute> routes = super.locateRoutes();
-
-			if (!config.getUseEurekaServices()) {
+			log.debug("locate routes");
+			log.debug("testconfig: " + config.getTestConfig());
+			if (!config.isUseEurekaServices()) {
 				for (String serviceId : serviceDiscovery.getServices()) {
 					String serviceName = serviceId;
-					if (config.getRemoveAppPrefix()) {
+					String customServiceId = config.getServiceId(serviceId);
+					if (config.isRemoveAppPrefix()) {
 						serviceName = serviceName.replaceAll(this.config.getAppPrefix(), "");
 					}
 					String path = "/" + config.getServicesPrefix() + "/" + serviceName + "/**";
-					CustomZuulRoute customZuulRoute = new CustomZuulRoute(config, serviceId, serviceName, serviceName,
+					CustomZuulRoute customZuulRoute = new CustomZuulRoute(config, customServiceId, serviceName, serviceName,
 							path, null, null, true, false, null);
 					routes.put(path, customZuulRoute);
 				}
 			}
 			return routes;
 		}
-	}
-
-	public static class CustomZuulRoute extends ZuulRoute {
-
-		String customServiceId;
-		String customServiceName;
-		DynamicZuulConfig config;
-
-		public CustomZuulRoute(DynamicZuulConfig config, String customServiceId, String customServiceName, String id,
-				String path, String serviceId, String url, boolean stripPrefix, Boolean retryable,
-				Set<String> sensitiveHeaders) {
-			super(id, path, serviceId, url, stripPrefix, retryable, sensitiveHeaders);
-			this.config = config;
-			this.customServiceId = customServiceId;
-			this.customServiceName = customServiceName;
-		}
-
-		public String getCustomServiceId() {
-			return customServiceId;
-		}
-
-		@Override
-		public String getLocation() {
-			int port = config.getServicesPort();
-			if (config.isLocalServices()) {
-
-				return "http://localhost:" + port + "/";
-			} else {
-				return "http://" + customServiceId + ":" + port + "/";
-			}
-
-		}
-
-		public void setCustomServiceId(String customServiceId) {
-			this.customServiceId = customServiceId;
-		}
-
 	}
 
 	@Autowired
