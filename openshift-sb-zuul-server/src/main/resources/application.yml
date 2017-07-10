@@ -39,22 +39,6 @@ dynamiczuul:
   appPrefix: openshift-sb-
 
 
-zuul:
-  routes:
-    stores: /stores/**
-    stores2:
-        path: /stores2/**
-        serviceId: STORES
-    stores3:
-        path: /customers3/**
-        url: http://localhost:9000
-    customersUrl:
-        path: /customersUrl/**
-        url: http://localhost:9000        
-    customers: /customers/**
-    zuulserver: /self/**
-
-
 logging:
   level:
     ROOT: INFO

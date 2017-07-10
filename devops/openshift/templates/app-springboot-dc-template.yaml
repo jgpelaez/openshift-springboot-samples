@@ -45,6 +45,8 @@ objects:
           env:
             - name: PORT
               value:  "${PORT}"
+            - name: SERVICES_PORT
+              value:  "${PORT}"
             - name: EUREKA_URI
               value:  "${EUREKA_URI}"
             - name: CONFIG_SERVER_URI
