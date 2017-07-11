@@ -5,3 +5,5 @@ openshift_templates_path: "{{ playbook_dir }}/../openshift/templates"
 eureka_uri: "http://openshift-sb-eureka:8761/eureka/"
 config_server_uri: "http://openshift-sb-config-server:8888/configserver/"
 app_version: 0.0.1-SNAPSHOT
+deployment_type_sufix: ""
+openshift_autoscale: false

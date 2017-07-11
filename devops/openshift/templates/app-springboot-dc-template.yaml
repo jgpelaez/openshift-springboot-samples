@@ -61,7 +61,7 @@ objects:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - ${APP_NAME}-${SERVICE_NAME}
+        - ${APP_NAME}-${SERVICE_NAME}${DEPLOYMENT_TYPE_SUFIX}
         from:
           kind: ImageStreamTag
           namespace: ${BUILD_NAMESPACE}
@@ -99,4 +99,4 @@ parameters:
 - name: APP_LIMIT_MEMORY_MI
   value: "1024"
 - name: HEALTH_PATH
-  value: "/health"
+  value: "/mngmt/health"

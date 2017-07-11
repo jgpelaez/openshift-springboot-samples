@@ -27,9 +27,9 @@
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
         -p SOURCE_CONTEXT_DIR=./{{ source_context_dir }}
+        -p NAMESPACE={{ openshift_project_name }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
-        -p NAMESPACE={{ openshift_project_name }}
         -p BUILD_NAMESPACE={{ build_namespace }}
         -p BUILD_IMAGE={{ build_image }}
         -p GIT_SOURCE_URL={{ git_source_url }}
@@ -37,7 +37,7 @@
     - role: deploy-openshift-template
       template_name: "app-springboot-dc-template.yaml"
       template_type: "dc"
-      resource_name: "{{ app_resource_name }}"
+      resource_name: "{{ app_resource_name }}{{ deployment_type_sufix }}"
       openshift_extra_params: >
         -p BUILD_NAMESPACE={{ build_namespace }}
         -p PORT={{ app_port }} 
@@ -45,26 +45,26 @@
         -p CONFIG_SERVER_URI={{ config_server_uri }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
+        -p DEPLOYMENT_TYPE_SUFIX={{ deployment_type_sufix }}
         -p APP_ARTIFACT_ID={{ app_resource_name }}
         -p APP_VERSION={{ app_version }}
 
     - role: deploy-openshift-template
       template_name: "app-springboot-service-template.yaml"
       template_type: "service"
-      resource_name: "{{ app_resource_name }}"
+      resource_name: "{{ app_resource_name }}{{ deployment_type_sufix }}"
       openshift_extra_params: >
-        -p PORT={{ app_port }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
+        -p PORT={{ app_port }}
+        -p DEPLOYMENT_TYPE_SUFIX={{ deployment_type_sufix }}
     - role: deploy-openshift-template
       template_name: "app-springboot-route-template.yaml"
       template_type: "route"
       resource_name: "{{ app_resource_name }}"
       openshift_extra_params: >
         -p NAMESPACE={{ openshift_project_name }}
-        -p ROUTE_HOST_PREFIX={{ app_resource_name }}
         -p APP_NAME={{ app_name }}
         -p SERVICE_NAME={{ app_service_name }}
+        -p ROUTE_HOST_PREFIX={{ app_resource_name }}
         -p URL_SUFIX={{ url_sufix }}
-
-  
