@@ -41,9 +41,10 @@ dynamiczuul:
   appPrefix: openshift-sb-
 # Custom routes, if we want to use a different name for a service, for example to use a blue green deployment
 # can be specified here
+# http://zuul/services/lg-ms-customers
   customRoutes:
     lg-ms-customersblue:
-        serviceId: lg-ms-customers
+        serviceId: lg-ms-customerstmp
 # Service black list, all services matching with the regexp servicesBlackList expressions will be banned
 # http://www.vogella.com/tutorials/JavaRegularExpressions/article.html
   servicesBlacklist:
