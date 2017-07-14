@@ -44,6 +44,11 @@ dynamiczuul:
   customRoutes:
     lg-ms-customersblue:
         serviceId: lg-ms-customers
+# Service black list, all services matching with the regexp servicesBlackList expressions will be banned
+# http://www.vogella.com/tutorials/JavaRegularExpressions/article.html
+  servicesBlacklist:
+    - postgresql
+    - broker.*
 
 logging:
   level:

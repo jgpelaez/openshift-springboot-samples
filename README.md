@@ -249,7 +249,16 @@ dynamiczuul:
 # If we want the url's to remove a prefix, for example for using http://localhost:8765/services/ms-store
   removeAppPrefix: false   
   appPrefix: openshift-sb-
-
+# Custom routes, if we want to use a different name for a service, for example to use a blue green deployment
+# can be specified here
+  customRoutes:
+    lg-ms-customersblue:
+        serviceId: lg-ms-customers
+# Service black list, all services matching with the regexp servicesBlackList expressions will be banned
+# http://www.vogella.com/tutorials/JavaRegularExpressions/article.html
+  servicesBlacklist:
+    - postgresql
+    - broker.*
 ```
 
 - Testing it

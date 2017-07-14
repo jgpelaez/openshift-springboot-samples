@@ -1,6 +1,9 @@
 package es.jgpelaez.openshift.sb.zuulserver.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -20,9 +23,22 @@ public class DynamicZuulConfig {
 	private Integer servicesPort;
 	private String servicesPrefix;
 
+	private List<String> servicesBlacklist;
+
 	private boolean useEurekaServices;
 
 	private String testConfig;
+
+	public boolean isBlacklisted(String serviceId) {
+		if (servicesBlacklist != null) {
+			for (String bl : servicesBlacklist) {
+				if (serviceId.matches(bl)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	public boolean isUseEurekaServices() {
 		if ("false".equals(env.getProperty("spring.cloud.kubernetes.discovery.enabled"))) {
