@@ -15,16 +15,21 @@
  */
 package es.jgpelaez.openshift.sb.ms.customers.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Oliver Gierke
  */
-//@Entity
+// @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class Customer {
 
-	//@Id @GeneratedValue 
+	// @Id @GeneratedValue
 	Long id;
 	String firstname, lastname;
 	Address address;
