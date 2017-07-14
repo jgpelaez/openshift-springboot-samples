@@ -27,6 +27,14 @@ endpoints:
   info:
     path: /mngmt/info
 
+zuul:
+  ws:
+    brokerages:
+      lg-ms-customers:
+        end-points: /gs-guide-websocket
+        brokers:  /topic
+        destination-prefixes: /app
+        
 dynamiczuul:
 # we can disable the kubernetes service discovery and use Eureka
   useEurekaServices: false
@@ -44,7 +52,7 @@ dynamiczuul:
 # http://zuul/services/lg-ms-customers
   customRoutes:
     lg-ms-customersblue:
-        serviceId: lg-ms-customerstmp
+        serviceId: lg-ms-customers
 # Service black list, all services matching with the regexp servicesBlackList expressions will be banned
 # http://www.vogella.com/tutorials/JavaRegularExpressions/article.html
   servicesBlacklist:

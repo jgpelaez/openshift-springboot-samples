@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.netflix.zuul.ZuulProxyConfiguration;
 import org.springframework.cloud.netflix.zuul.filters.discovery.PatternServiceRouteMapper;
 import org.springframework.cloud.netflix.zuul.filters.discovery.ServiceRouteMapper;
@@ -20,16 +22,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 
-import es.jgpelaez.openshift.sb.zuulserver.config.DynamicZuulConfig;
+import com.github.mthizo247.cloud.netflix.zuul.web.socket.ZuulWebSocketConfiguration;
 
-@SpringBootApplication
+import es.jgpelaez.openshift.sb.zuulserver.config.DynamicZuulConfig;
+import es.jgpelaez.openshift.sb.zuulserver.config.WebSocketConfiguration;
+
+@SpringBootApplication(excludeName= { "discoveryClient"})
 @EnableCircuitBreaker
 /**
- * @author Juan Carlos García Peláez
- * Zuul cannot be import with @EnableZuulProxy, as this configuration should be
- * loaded later
+ * @author Juan Carlos García Peláez Zuul cannot be import
+ *         with @EnableZuulProxy, as this configuration should be loaded later
  */
-@Import(ZuulProxyConfiguration.class)
+@EnableZuulProxy
+//@Import({ ZuulProxyConfiguration.class, WebSocketConfiguration.class })
 public class ZuulServerApplication {
 
 	public static void main(String[] args) {

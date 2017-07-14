@@ -1,4 +1,4 @@
-package es.jgpelaez.openshift.sb.ms.customers;
+package es.jgpelaez.openshift.sb.ms.customers.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
